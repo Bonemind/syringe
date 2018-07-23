@@ -40,8 +40,8 @@ Syringe.injectable(B)
 
 Now Syringe is aware of these classes and you can inject them somewhere else in
 your.  To mark a class as syringe-injected you can either include Syringe in
-the class, or `wrap` the class, both of which generate a new method that provides
-the instances as requested by the initialize function:
+the class, or `wrap` the class, both of which generate a `new` method that provides
+the instances as requested by the `initialize` function:
 
 ```
 class C
