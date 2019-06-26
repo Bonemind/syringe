@@ -39,7 +39,7 @@ Syringe.injectable(B)
 ```
 
 Now Syringe is aware of these classes and you can inject them somewhere else in
-your.  To mark a class as syringe-injected you can either include Syringe in
+your application.  To mark a class as syringe-injected you can either include Syringe in
 the class, or `wrap` the class, both of which generate a `new` method that provides
 the instances as requested by the `initialize` function:
 
@@ -88,15 +88,17 @@ class Q
   def initialize(@t : T)
   end
 end
+
 Syringe.wrap(Q)
+
 q = Q.new # t.i_num will be 1
-q = Q.new # t.i_num will be 2
+q2 = Q.new # t.i_num will be 2
 ```
 
 ## Development
 
 Syringe has no external dependencies, so simply clone the repository
-and get started. Tests can be ran by:
+and get started. Tests can be run by:
 
 ```
 crystal spec
