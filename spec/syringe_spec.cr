@@ -79,4 +79,16 @@ describe Syringe do
     items = Items.new
     items.count.should eq(3)
   end
+
+  it "should still work when using modules" do
+    SomeClass3.new
+    SomeModule::SomeClass2.new
+  end
+
+  it "should allow arguments as array of classes that have mixin when using array" do
+    animals = AnimalFarm::Animals.new
+    animals.count.should eq(3)
+    animals = AnimalFarm::Special::Animals.new
+    animals.count.should eq(3)
+  end
 end
