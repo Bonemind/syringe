@@ -74,4 +74,9 @@ describe Syringe do
     t = SingletonProvidedInstance.new
     t.i.get_counter.should eq(2)
   end
+
+  it "should allow arguments as array of classes that have mixin" do
+    items = Items.new
+    items.count.should eq(3)
+  end
 end

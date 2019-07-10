@@ -67,3 +67,30 @@ class TRegistered
 end
 Syringe.wrap(TRegistered)
 
+module Item
+end
+
+class Items
+  include Syringe
+  def initialize(@items : Array(Item))
+  end
+
+  def count
+    @items.size
+  end
+end
+
+class Item1
+  include Item
+  Syringe.injectable
+end
+
+class Item2
+  include Item
+  Syringe.injectable
+end
+
+class Item3
+  include Item
+  Syringe.injectable
+end

@@ -94,6 +94,50 @@ Syringe.wrap(Q)
 q = Q.new # t.i_num will be 1
 q2 = Q.new # t.i_num will be 2
 ```
+If you want to have an array within the constructor.
+```
+module Animal
+  abstract def say(sentence : string)
+end
+
+class Animals
+  include Syringe
+  def initialize(@animals : Array(Animal)
+  end
+
+  def say(sentence : string)
+    @animals.each do |animal|
+      animal.say(sentence)
+    end
+  end
+end
+
+class Dog
+  Syringe.injectable
+  include Animal
+
+  def say(sentence : string)
+    puts "Woof! #{sentence}"
+  end
+end
+
+class Cat
+  Syringe.injectable
+  include Animal
+
+  def say(sentence : string)
+    puts "Meow! #{sentence}"
+  end
+end
+
+animals = Animals.new
+animals.say("Hi")
+```
+This would output
+```
+Woof! Hi
+Meow! Hi
+```
 
 ## Development
 
