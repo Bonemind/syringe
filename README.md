@@ -94,7 +94,10 @@ Syringe.wrap(Q)
 q = Q.new # t.i_num will be 1
 q2 = Q.new # t.i_num will be 2
 ```
-If you want to have an array within the constructor.
+
+If you want to inject an array of descendants you can specify
+`Array(T)` as the argument type
+
 ```
 module Animal
   abstract def say(sentence : string)
@@ -159,3 +162,4 @@ crystal spec
 ## Contributors
 
 - [Bonemind](https://github.com/Bonemind) Subhi Dweik - creator, maintainer
+- [elliotize](https://github.com/elliotize) elliotize - Array descendants
