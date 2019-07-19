@@ -42,7 +42,7 @@ Syring.injectable(PostgresDbClient)
 class FooController
   include Syringe
 
-  def initialize(@db_client)
+  def initialize(@db_client : DbClient)
   end
 end
 ```
