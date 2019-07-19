@@ -1,6 +1,6 @@
 # Syringe
 
-[![Build Status](https://travis-ci.org/Bonemind/syringe.svg?branch=master)](https://travis-ci.org/Bonemind/syringe)[![Build Status](https://travis-ci.org/Bonemind/syringe.svg?branch=master)](https://travis-ci.org/Bonemind/syringe)
+[![Build Status](https://travis-ci.org/Bonemind/syringe.svg?branch=master)](https://travis-ci.org/Bonemind/syringe)
 
 A simple and basic dependency injection shard for crystal
 
