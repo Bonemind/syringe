@@ -14,6 +14,41 @@ dependencies:
 
 ## Usage
 
+### Use case
+
+Syringe attempts to provide dependency injection for crystal. This allows
+a class to define a type it expects an instance of, without having to add
+it when constructing the class for example, instead, an instance gets provided
+automatically when a class is instantiated.
+
+This allows you to decouple implementation from interface and manage your dependencies
+in a more flexible way. If a class expects a `DbClient` for example, you could
+automatically inject a `TestDbClient` when running tests, while inserting
+your `PostgresDbClient` in other environments. This can be achieved without the rest
+of your code being any wiser.
+
+```crystal
+# spec_helper.cr
+class TestDbClient : DbClient
+end
+
+Syring.injectable(TestDbClient)
+
+# main.cr
+Syring.injectable(PostgresDbClient)
+
+# foo_controller.cr
+
+class FooController
+  include Syringe
+
+  def initialize(@db_client)
+  end
+end
+```
+
+### Code
+
 ```crystal
 require "syringe"
 ```
@@ -25,7 +60,7 @@ somewhere else).
 
 To mark classes for injection, you have one of two options:
 
-```
+```crystal
 require "syringe"
 
 class A
@@ -43,7 +78,7 @@ your application.  To mark a class as syringe-injected you can either include Sy
 the class, or `wrap` the class, both of which generate a `new` method that provides
 the instances as requested by the `initialize` function:
 
-```
+```crystal
 class C
   include Syringe
 
@@ -68,7 +103,7 @@ mark providers for certain classes which will be used when a class is requested.
 This class has to implement a `getInstance` class method that returns an instance
 of the provided class.
 
-```
+```crystal
 class T
   def new(@i_num : Int32)
   end
@@ -98,7 +133,7 @@ q2 = Q.new # t.i_num will be 2
 If you want to inject an array of descendants you can specify
 `Array(T)` as the argument type
 
-```
+```crystal
 module Animal
   abstract def say(sentence : string)
 end
@@ -136,7 +171,9 @@ end
 animals = Animals.new
 animals.say("Hi")
 ```
+
 This would output
+
 ```
 Woof! Hi
 Meow! Hi
