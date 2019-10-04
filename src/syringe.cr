@@ -1,7 +1,6 @@
 require "./syringe/*"
 
 module Syringe
-
 	macro included
 		Syringe.wrap(\{{@type}})
 	end
@@ -10,8 +9,8 @@ module Syringe
 		macro finished
 			\{% for ctor in {{klass}}.methods.select { |m| m.name == "initialize" } %}
 				 def {{klass}}.new
-				    \{{ puts nodule = {{klass.id.split("::").reject { |k| k == klass.id.split("::").last}.join("::")}} }}
-					\{{ puts module_classes = Object.all_subclasses.select { |k| nodule != "" && k.id.includes?(nodule) }.map { |k| k.id.split("::").last } }}
+				    \{% nodule = {{klass.id.split("::").reject { |k| k == klass.id.split("::").last}.join("::") }} %}
+					\{% module_classes = Object.all_subclasses.select { |k| nodule != "" && k.id.includes?(nodule) }.map { |k| k.id.split("::").last } %}
 					 new(
 						\{% for arg in ctor.args %}
 							\{% if arg.restriction.is_a?(Generic) && arg.restriction.name.resolve == Array %}
@@ -21,7 +20,7 @@ module Syringe
 									\{% for injectable_class in array_type_classes_descendants %}
 										\{% if arg.restriction.is_a?(Generic) && arg.restriction.name.resolve == Array %}
 											\{% if module_classes.includes?(injectable_class) %}
-												Syringe.get\{{nodule.id.tr(":","_")}}__\{{injectable_class.id.tr("::","_")}},
+												Syringe.get\{{nodule.id.tr(":","_")}}__\{{injectable_class.id.tr(":","_")}},
 											\{% else %}
 												Syringe.get\{{injectable_class.id.tr(":","_")}},
 											\{% end %}
@@ -30,7 +29,7 @@ module Syringe
 								] of \{{ array_type_classes.first }}
 							\{% else %}
 								\{% if module_classes.includes?(arg.restriction.id.stringify) %}
-									\{{arg.name.id}}: Syringe.get\{{nodule.id.tr(":","_")}}__\{{arg.restriction.id.tr("::","_")}},
+									\{{arg.name.id}}: Syringe.get\{{nodule.id.tr(":","_")}}__\{{arg.restriction.id.tr(":","_")}},
 								\{% else %}
 									\{{arg.name.id}}: Syringe.get\{{arg.restriction.id.tr(":","_")}},
 								\{% end %}
