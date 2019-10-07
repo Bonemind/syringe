@@ -34,6 +34,16 @@ class SingletonProvidedInstance
 end
 Syringe.wrap(SingletonProvidedInstance)
 
+module ThemClasses
+  class JustAnInjectable
+  end
+
+  class AnInjectableWrap
+    def initialize(@i : JustAnInjectable)
+    end
+  end
+end
+
 describe Syringe do
   it "should be able to inject when included" do
     t = TInclude.new
@@ -78,5 +88,24 @@ describe Syringe do
   it "should allow arguments as array of classes that have mixin" do
     items = Items.new
     items.count.should eq(3)
+  end
+
+  it "should inject and wrap where able to" do
+    Syringe.define_providers(
+      ThemClasses::JustAnInjectable,
+      ThemClasses::AnInjectableWrap
+    )
+
+    t = AnInjectableWrap.new
+    t.i.should be_a(ThemClasses::JustAnInjectable)
+  end
+
+  it "should inject as a Singleton and wrap where able to" do
+    Syringe.injectable(ThemClasses::JustAnInjectable)
+    Syringe.define_singleton_providers(ThemClasses::AnInjectableWrap)
+
+    t = AnInjectableWrap.new
+    r = AnInjectableWrap.new
+    t.should eq(r)
   end
 end
