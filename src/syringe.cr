@@ -49,5 +49,47 @@ module Syringe
 				end
 			{% end %}
 		end
-	end
+  end
+
+  macro auto_wrap(klass)
+    \{% if !{{klass}}.methods.select { |m| m.name == "initialize" }.empty? %}
+      \{% if !{{klass}}.methods.select { |m| m.name == "initialize" }[0].args.empty? %}
+        Syringe.wrap({{klass}})
+      \{% end %}
+    \{% end %}
+  end
+
+  macro define_providers(*klasses)
+    {% for klass in klasses  %}
+      module {{ klass.id.split("::").reject { |k| k == klass.id.split("::").last}.join("::").id }}
+        class {{ klass }}Provider
+          Syringe.provide({{klass}})
+
+          def self.getInstance
+            {{klass}}.new
+          end
+        end
+      end
+
+      Syringe.auto_wrap({{klass}})
+    {% end %}
+  end
+
+  macro define_singleton_providers(*klasses)
+    {% for klass in klasses  %}
+      module {{ klass.id.split("::").reject { |k| k == klass.id.split("::").last}.join("::").id }}
+        class {{ klass }}Provider
+          Syringe.provide({{klass}})
+
+          @@instance = {{klass}}.new
+
+          def self.getInstance
+            @@instance
+          end
+        end
+      end
+
+      Syringe.auto_wrap({{klass}})
+    {% end %}
+  end
 end
