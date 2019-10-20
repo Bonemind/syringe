@@ -94,3 +94,67 @@ class Item3
   include Item
   Syringe.injectable
 end
+
+module SomeModule
+  class SomeClass
+    Syringe.injectable
+  end
+
+  class SomeClass2
+    include Syringe
+    def initialize(@someclass : SomeClass)
+    end
+  end
+end
+
+class SomeClass3
+  include Syringe
+  def initialize(@someclass : SomeModule::SomeClass)
+  end
+end
+
+module AnimalFarm
+  module Animal
+  end
+
+  module Pets
+    class Dog
+      include Animal
+      Syringe.injectable
+    end
+
+    class Cat
+      include Animal
+      Syringe.injectable
+    end
+  end
+
+  module Livestock
+    class Cow
+      include Animal
+      Syringe.injectable
+    end
+  end
+
+  class Animals
+    include Syringe
+    def initialize(@items : Array(Animal))
+    end
+
+    def count
+      @items.size
+    end
+  end
+
+  module Special
+    class Animals
+      include Syringe
+      def initialize(@items : Array(AnimalFarm::Animal))
+      end
+
+      def count
+        @items.size
+      end
+    end
+  end
+end
