@@ -35,7 +35,7 @@ module Syringe
                     \{% end %}
                   \{% end %}
                 # All items in array have to be of this array class method.
-								] of \{{ array_type_classes.first }}
+                ] of \{{ array_type_classes.first }}
               \{% else %}
                 # If injected class is defined in module of this class.
                 \{% if module_classes.includes?(arg.restriction.id.stringify) %}
@@ -55,13 +55,25 @@ module Syringe
 
 	macro injectable
 		Syringe.injectable(\{{@type}})
+  end
+
+  macro injectable_as(klass_to_inject)
+		Syringe.injectable_as(\{{@type}}, klass_to_inject)
 	end
 
 	macro injectable(klass)
-		macro finished
-			def Syringe.get{{ klass.id.tr(":","_") }}
-				return {{ klass.id }}.new
-			end
+    macro finished
+      def Syringe.get{{ klass.id.tr(":","_") }}
+        return {{ klass.id }}.new
+      end
+		end
+  end
+
+  macro injectable_as(klass, klass_to_inject)
+    macro finished
+      def Syringe.get{{ klass_to_inject.id.tr(":","_") }}
+        return {{ klass.id }}.new
+      end
 		end
 	end
 

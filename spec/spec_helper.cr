@@ -158,3 +158,96 @@ module AnimalFarm
     end
   end
 end
+
+module App
+  module IDbClient1
+  end
+end
+
+module App
+  class IDbClient2
+  end
+end
+
+module App
+  abstract class IDbClient3
+  end
+end
+
+class TestDbClient
+  include App::IDbClient1
+end
+
+module App
+  class AppDbClient < App::IDbClient2
+  end
+end
+
+module App
+  class OtherDbClient < App::IDbClient3
+  end
+end
+
+module App
+  class FooController1
+    def initialize(@db_client : App::IDbClient1)
+    end
+
+    def injected_class
+      @db_client.class
+    end
+  end
+end
+
+module App
+  class FooController2
+    def initialize(@db_client : App::IDbClient2)
+    end
+
+    def injected_class
+      @db_client.class
+    end
+  end
+end
+
+module App
+  class FooController3
+    def initialize(@db_client : App::IDbClient3)
+    end
+
+    def injected_class
+      @db_client.class
+    end
+  end
+end
+
+Syringe.injectable_as(TestDbClient, App::IDbClient1)
+Syringe.injectable_as(App::AppDbClient, App::IDbClient2)
+Syringe.injectable_as(App::OtherDbClient, App::IDbClient3)
+
+Syringe.wrap(App::FooController1)
+Syringe.wrap(App::FooController2)
+Syringe.wrap(App::FooController3)
+
+module App
+  class FooController4
+    include Syringe
+    def initialize(@db_client : App::IDbClient3)
+    end
+
+    def injected_class
+      @db_client.class
+    end
+  end
+end
+
+module App
+  module App::DbClient4
+  end
+end
+
+module App
+  class ActualDbClient
+    Syringe.injectable_as App::DbClient4
+  end
+end

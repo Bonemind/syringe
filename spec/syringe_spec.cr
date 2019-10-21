@@ -91,4 +91,10 @@ describe Syringe do
     animals = AnimalFarm::Special::Animals.new
     animals.count.should eq(3)
   end
+
+  it "should use the only wrapped instance when using mixin" do
+    App::FooController1.new.injected_class.should eq(TestDbClient)
+    App::FooController2.new.injected_class.should eq(App::AppDbClient)
+    App::FooController3.new.injected_class.should eq(App::OtherDbClient)
+  end
 end
