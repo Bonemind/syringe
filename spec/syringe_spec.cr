@@ -79,4 +79,22 @@ describe Syringe do
     items = Items.new
     items.count.should eq(3)
   end
+
+  it "should still work when using modules" do
+    SomeClass3.new
+    SomeModule::SomeClass2.new
+  end
+
+  it "should allow arguments as array of classes that have mixin when using array" do
+    animals = AnimalFarm::Animals.new
+    animals.count.should eq(3)
+    animals = AnimalFarm::Special::Animals.new
+    animals.count.should eq(3)
+  end
+
+  it "should use the only wrapped instance when using mixin" do
+    App::FooController1.new.injected_class.should eq(TestDbClient)
+    App::FooController2.new.injected_class.should eq(App::AppDbClient)
+    App::FooController3.new.injected_class.should eq(App::OtherDbClient)
+  end
 end
